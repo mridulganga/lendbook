@@ -3,10 +3,10 @@
 //Basic DB Functions-----------------------------------------------------------------
 	function connectDB(){
 		//$dbs = parse_ini_file("db.ini",true);
-		$host = "localhost";
-		$user = "root";
-		$pass = "";
-		$db = "lendbook";
+		$host = "mysql.hostinger.in";
+		$user = "u526765360_root";
+		$pass = "root1234";
+		$db = "u526765360_main";
 
 		$conn = new mysqli($host, $user, $pass, $db);
 		// Check connection
@@ -15,11 +15,11 @@
 
 		return $conn;
 	}
-	
+
 	function disconnectDB($conn){
 		$conn->close();
 	}
-	
+
 	function queryDB($conn, $sql){
 		$result = $conn->query($sql);
 		//return table if its not empty
@@ -35,7 +35,7 @@
 
 	function initialiseDB(){
 		$conn = connectDB();
-			
+
 			$sql = "create table Books()";
 			executeDB($conn,$sql);
 
@@ -74,7 +74,7 @@
 	function addFile($tmpfilepath,$name){
 
 		$filename = "./files/".hash("md5",$tmpfilepath).".".pathinfo($name,PATHINFO_EXTENSION);
-		
+
 		if (rename($tmpfilepath, $filename)){
 			$c = connectDB();
 			$sql = "insert into files values(0,'".$filename."')";
@@ -147,7 +147,7 @@
 			//Book ID, Book Title, Author, Type, Description
 		$sql = "insert into books values(0,'".$title."','".$author."','".$publisher."','book','".$desc."','".$cover."','0',".$price.", ".$userid.",now())";
 		$ret = executeDB($c,$sql);
-		
+
 		$c->close();
 		return $ret;
 	}
@@ -165,9 +165,9 @@
 			//Book ID, Book Title, Author, Type, Description
 		$sql = "insert into books values(0,'".$title."','".$author."','".$publisher."','ebook','".$desc."','".$cover."','".$file."',".$price.", ".$userid.",now())";
 		$ret = executeDB($c,$sql);
-		
+
 		$c->close();
-		return $ret;	
+		return $ret;
 	}
 
 	function addAudioBook($title,$author,$publisher,$desc,$cover,$file,$price){
@@ -183,7 +183,7 @@
 			//Book ID, Book Title, Author, Type, Description
 		$sql = "insert into books values(0,'".$title."','".$author."','".$publisher."','audiobook','".$desc."','".$cover."','".$file."',".$price.", ".$userid.",now())";
 		$ret = executeDB($c,$sql);
-		
+
 		$c->close();
 		return $ret;
 	}
@@ -227,8 +227,8 @@
 			default:
 				$ret = FALSE;
 				break;
-		}			
-		
+		}
+
 		$ret = executeDB($c,$sql);
 		disconnectDB($c);
 		return $ret;
@@ -327,7 +327,7 @@
 			case 'notes':
 				$sql = "update users set ".$type."='".$value."' where id=".$id;
 				break;
-			
+
 			default:
 				$ret =  FALSE;
 				break;
@@ -378,7 +378,7 @@
 			return TRUE;
 		else
 			return FALSE;
-		
+
 	}
 
 	function changePassword($userid,$oldpass,$newpass){
@@ -411,7 +411,7 @@
 		$email = $c->real_escape_string($email);
 		$sql = "select * from users where email='".$email."'";
 		$ret = queryDB($c,$sql);
-		
+
 		$row = $ret->fetch_assoc();
 		$id = $row["id"];
 		disconnectDB($c);
